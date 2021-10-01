@@ -557,8 +557,10 @@ class DynELF(object):
         # If we are loading from a different library, create
         # a DynELF instance for it.
         #
-        if lib is not None: dynlib = self._dynamic_load_dynelf(lib)
-        else:   dynlib = self
+        if lib is not None:
+            dynlib = self._dynamic_load_dynelf(lib)
+        else:
+            dynlib = self
 
         if dynlib is None:
             log.failure("Could not find %r", lib)
@@ -578,7 +580,7 @@ class DynELF(object):
                     with context.local(log_level='error'):
                         e = ELF(path)
                         e.address = dynlib.libbase
-                        result = e.symbols[symb]
+                        result = e.symbols[symb.decode()]
         if symb and not result:
             self.status("Trying remote lookup")
             result = dynlib._lookup(symb)
